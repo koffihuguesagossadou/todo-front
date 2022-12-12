@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import DelBtn from '../low-level/DelBtn';
-import {getData} from '../../utils/utils'
+import {getData, deleteData} from '../../utils/utils'
 import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
 
-const Tasks = () => {
+const Tasks = (props) => {
 
+    const apiEndpoint = "http://localhost:5000/api/todo/";
+    const {dataUpdated, setDataUpdated} = props
     const [items, setItems] = useState([])
 
     // fetch data with Axios
@@ -43,29 +44,50 @@ const Tasks = () => {
     // }
 
     useEffect(() =>{
-         
-        getData('http://localhost:5000/api/todo/getTodos', (res) =>{
-            setItems(res.data)
-            console.log(1)
-        })
+        console.log(dataUpdated)
 
-    },[])
+        if(dataUpdated){
+            /* A custom function that I created to fetch data from the server. */
+            getData(apiEndpoint+'getTodos', (res) =>{
+                setItems(res.data)
+            })
+            
+            setDataUpdated(false)
+        }
+
+
+    }, [dataUpdated, setDataUpdated])
+
+
+
+    /**
+     * 
+     * @param {int} index index of task to delete
+     */
+    const deleteTask = (e,index)=>{
+        e.preventDefault();
+        deleteData(apiEndpoint+'deleteTodo/'+index, (res)=>{
+            console.log(res)
+        })
+        setDataUpdated(true)
+    }
 
     return (
         <div className="task-sp">
             {
+                /** display receive data from api */
                 items.map((value, index, array) => {
                     return(
                         <div key={index} className="task-info">
                             <div className="task-txt">
-                                <p>{value.text}</p>
+                                <p>{value !==null ? value.text: ""}</p>
                             </div>
                             <div className="btns-sp">
                                 <span>
                                     {value.is_complete? <AiOutlineCheck/> : ''}
                                 </span>
                                 <span>
-                                    <DelBtn><AiOutlineClose/></DelBtn>
+                                    <button onClick={(e)=>deleteTask(e, index)}><AiOutlineClose/></button>
                                 </span>
                             </div>
                         </div>

@@ -4,8 +4,9 @@ import AddBtn from '../low-level/AddBtn';
 import Tags from '../medium-level/Tags'
 import {sendData} from '../../utils/utils'
 
-const AddTask = () => {
+const AddTask = (props) => {
 
+    const {dataUpdated, setDataUpdated} = props
     const[entryName, setEntryName] = useState('')
     const[input, setInput] = useState('')
     const [tags, setTags] = useState([])
@@ -68,15 +69,16 @@ const AddTask = () => {
         //     return [...prevState, {"id": 7, "name": entry}]
         // })
 
-        console.log(data)
-
         sendData('http://localhost:5000/api/todo/addTodos', data, (response)=>{
             console.log(response)
+            setDataUpdated(true)
+            console.log(dataUpdated)
         })
+
+        
     }
 
 
-    console.log(entryName)
     return (
         <div className="container">
             <form action="" className="frm-sp">

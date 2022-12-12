@@ -1,15 +1,18 @@
-import React from 'react';
+import React, {useState} from 'react';
 import AddTask from '../components/high-level/AddTask';
 import TaskList from '../components/high-level/TaskList'
 const Home = () => {
+
+    const [dataUpdated, setDataUpdated] = useState(true)
+
     return (
         <div className="main-content">
             <div className="container">
                 <div className="add-task-sp">
-                    <AddTask/>
+                    <AddTask  setDataUpdated={setDataUpdated} dataUpdated={dataUpdated}/>
                 </div>
                 <div className="tasks-list-sp">
-                    <TaskList/>
+                    <TaskList setDataUpdated={setDataUpdated} dataUpdated={dataUpdated}/>
                 </div>
             </div>
         </div>
