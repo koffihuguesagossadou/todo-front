@@ -2,23 +2,14 @@ import React, {useState} from 'react';
 import Input from '../low-level/Input'
 import AddBtn from '../low-level/AddBtn';
 import Tags from '../medium-level/Tags'
-import {sendData} from '../../utils/utils'
+import {apiCall} from '../../utils/utils'
 
-const AddTask = (props) => {
+const AddTask = () => {
 
-    const {dataUpdated, setDataUpdated} = props
+    const apiEndpoint = "http://localhost:5000/api/todo/";
     const[entryName, setEntryName] = useState('')
     const[input, setInput] = useState('')
     const [tags, setTags] = useState([])
-
-    const handleChangeNameInput = (e) => {
-        setEntryName(e.target.value)
-    }
-
-    const onInputTagsChange = (e) => {
-        setInput(e.target.value)
-        
-    }
     
 
     /**
@@ -55,43 +46,42 @@ const AddTask = (props) => {
 
     const data = {
         text: entryName,
-        Tags : tags
+        tags : tags
     }
+    
 
-       
-    /**
-     * add data to database when button is clicked
-     * @param {*} e default event parameter
-     */
     const handleClick = (e)=>{
         e.preventDefault()
         // setTodo(prevState=>{
         //     return [...prevState, {"id": 7, "name": entry}]
         // })
-
-        sendData('http://localhost:5000/api/todo/addTodos', data, (response)=>{
+        apiCall().post(apiEndpoint+'addTodos',data)
+        .then(response=>{
             console.log(response)
-            setDataUpdated(true)
-            console.log(dataUpdated)
         })
-
-        
     }
 
 
     return (
-        <div className="container">
-            <form action="" className="frm-sp">
-                <Input entry={entryName} handleChange={handleChangeNameInput}text="text" handleKeyDown={null} placeholder="name"  />
-                <Tags 
-                    tags={tags}
-                    input = {input}
-                    onInputChange = {onInputTagsChange}
-                    onKeyDown = {onKeyDown}
-                    deleteTag = {deleteTag}
-                />
-                <AddBtn handleClick = {(e)=>handleClick(e)}/>
-            </form>
+        <div className="add-wrapper">
+            <div className="add-form">
+                <form action="" className="frm-sp">
+                    <Input entry={entryName} 
+                    handleChange={(e) => {setEntryName(e.target.value)}}
+                    text="text" 
+                    handleKeyDown={null} 
+                    placeholder="Add a task to do..."  />
+
+                    <Tags 
+                        tags={tags}
+                        input = {input}
+                        onInputChange = {(e) => {setInput(e.target.value)}}
+                        onKeyDown = {onKeyDown}
+                        deleteTag = {deleteTag}
+                    />
+                    <AddBtn handleClick = {(e)=>handleClick(e)}/>
+                </form>
+            </div>
         </div>
     );
 };

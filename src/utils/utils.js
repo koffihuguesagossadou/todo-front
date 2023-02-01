@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const options = {
     headers: {
-      Accept: "application/json",
+      "Accept": "application/json",
       "Content-Type": "application/json;charset=UTF-8",
     },
   }
@@ -13,6 +13,27 @@ const options = {
    * @param {String} url 
    * @param {function} callback 
    */
+
+
+export function apiCall(){
+    
+
+    return{
+        get: async function(url){
+            const data = await axios.get(url).then((data) => {
+                return data
+            })
+
+            return data
+        },
+
+        post: async (url, data)=>{
+            const response = await axios.post(url, data).then((response=>{return response}))
+            return response
+        }
+    }
+}
+
 export const getData = (url, callback) => {
 
     // const res = await axios.get(url)

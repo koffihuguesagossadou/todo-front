@@ -1,64 +1,27 @@
 import React, {useState, useEffect} from 'react';
-import {getData, deleteData} from '../../utils/utils'
-import { AiOutlineCheck, AiOutlineClose } from "react-icons/ai";
-
-const Tasks = (props) => {
+import {deleteData, apiCall} from '../../utils/utils'
+import { AiOutlineCheck } from "react-icons/ai";
+import { FaTrash, FaPen } from "react-icons/fa"
+const Tasks = () => {
 
     const apiEndpoint = "http://localhost:5000/api/todo/";
-    const {dataUpdated, setDataUpdated} = props
     const [items, setItems] = useState([])
 
-    // fetch data with Axios
-    // const getTodos = async () => {
-    //     try {
-    //         const res = await axios.get('http://localhost:5000/api/todo/getTodos')
-    //         setItems(res.data)
-    //     } catch (error) {
-            
-    //     }
-    // }
     
-    // fetch data with fetch API
-    // const fetchData = () =>{
-    //     const options = {
-    //         headers : {
-    //             'Content-Type': 'application/json',
-    //             'Accept': 'application/json'
-    //         }
-    //     }
-
-    //     /** fetching data from json file */
-    //     fetch('http://localhost:5000/api/todo/getTodos', options)
-    //     .then(response => {
-    //         if(response.ok){
-    //             return response.json();
-    //         }
-    //         throw response;
-    //     })
-    //     .then(data => {
-    //         setItems(data)
-    //     })
-    //     .catch(err => {
-    //         console.error(err);
-    //     })
-    // }
 
     useEffect(() =>{
-        console.log(dataUpdated)
 
-        if(dataUpdated){
+        
+        if(items.length === 0){
             /* A custom function that I created to fetch data from the server. */
-            getData(apiEndpoint+'getTodos', (res) =>{
-                setItems(res.data)
-            })
-            
-            setDataUpdated(false)
+            apiCall().get(apiEndpoint+'getTodos')
+                .then(response=>{
+                    const data = response.data.data
+                    setItems(Object.entries(data))
+                })
         }
 
-
-    }, [dataUpdated, setDataUpdated])
-
-
+    },[items])
 
     /**
      * 
@@ -69,31 +32,49 @@ const Tasks = (props) => {
         deleteData(apiEndpoint+'deleteTodo/'+index, (res)=>{
             console.log(res)
         })
-        setDataUpdated(true)
+        
     }
 
     return (
         <div className="task-sp">
             {
                 /** display receive data from api */
-                items.map((value, index, array) => {
+                items.map((value, index) => {
                     return(
-                        <div key={index} className="task-info">
+                        <div key={value[0]} className="task-info">
                             <div className="task-txt">
-                                <p>{value !==null ? value.text: ""}</p>
+                                <div className="task-title">
+                                    <h3>{value[1].todoName}</h3>
+                                </div>
+                                <div className="task-tags">
+                                   
+                                    {
+                                        Object.entries(value[1].tags).map((value, index)=>{
+                                            return <span key={index+ Date.now()}>{value[1]}</span>
+                                        })
+                                    }
+                                   
+                                </div>
                             </div>
                             <div className="btns-sp">
-                                <span>
-                                    {value.is_complete? <AiOutlineCheck/> : ''}
-                                </span>
-                                <span>
-                                    <button onClick={(e)=>deleteTask(e, index)}><AiOutlineClose/></button>
-                                </span>
+ 
+                                {
+                                    value[1].is_complete? 
+                                    <span className="is-complete"><AiOutlineCheck/></span> : 
+                                    <>
+                                        <span className="edit">
+                                            <button onClick={(e)=>deleteTask(e, index)}><FaPen/></button>
+                                        </span>
+                                        <span className="del">
+                                            <button onClick={(e)=>deleteTask(e, index)}><FaTrash/></button>
+                                        </span>
+                                    </>
+                                }
+                                
                             </div>
                         </div>
                     )
                 })
-            
             }
         </div>
     );

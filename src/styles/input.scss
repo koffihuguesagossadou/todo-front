@@ -1,0 +1,42 @@
+.input-sp{
+    border-bottom: 1px solid $gray-color;
+    margin-bottom: 1rem;
+    input{
+        width: 100%;
+        border: none;
+        outline: none;
+        font-size: 1.125rem;
+        padding-left: 10px;
+        font-family: $primary-font;
+        line-height: 2rem;
+    }
+}
+
+.tags-sp{
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid $gray-color;
+    .display-tags{
+        display: flex;
+        background-color: $primary-color;
+        border-radius: 5px;
+        margin: 0 10px 3px 0;
+        span{
+            color: $gray-color;
+            font-size: 1.125rem;
+            padding: 7px;
+            button{
+                cursor: pointer;
+                border: none;
+                background-color: transparent;
+            }
+        }
+    }
+    .input-sp{
+        max-width: 40%;
+        border: none;
+        margin:0;
+        
+    }
+}

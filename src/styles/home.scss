@@ -1,0 +1,146 @@
+.main-content{
+    .todo-wrp{
+        @include flexColumn;
+        padding: 5rem;
+        .add-wrapper{
+            
+            @include centerElement;
+            .add-form{
+                position: relative;
+                background-color: white;
+                width: 50%;
+                border-radius: 10px;
+                box-shadow: $shadow1;
+
+                .frm-sp{
+                    margin: 2rem 4rem;
+                    @import "./input.scss";
+                }
+
+                .add-btn-sp{
+                    position: absolute;
+                    right: 10px;
+                    bottom: -20px;
+                    background-color: $primary-color;
+                    width: 38px;
+                    height: 38px;
+                    border-radius: 100%;
+                    display: flex;
+                    button{
+                        flex-basis: 100%;
+                        cursor: pointer;
+                        padding: 0;
+                        border: none;
+                        background-color: transparent;
+                        svg{
+                            transform: scale(1.3);
+                            fill: white;
+                        }
+                    }
+                }
+            }
+        }
+
+        .task-list-sp{
+            @include centerElement;
+            .task-sp{
+                width: 50%;
+                padding: 2rem 0;
+                .task-info{
+                    position: relative;
+                    display: flex;
+                    background-color: white;
+                    border-radius: 10px;
+                    padding: 1rem;
+                    width: 100%;
+                    margin-bottom: 2rem;
+                    box-shadow: $shadow2;
+                    svg{
+                        fill: black;
+                    }
+
+                    .task-txt{
+
+                        width: 80%;
+                        .task-title{
+                            h3{
+                                line-height: 3rem;
+                                font-size: 1.25rem;
+                            }
+                        }
+                        .task-tags{
+                            display: flex;
+                            flex-wrap: wrap;
+                            span{
+                                font-style: italic;
+                                color:$secondary-color;
+                                margin-right: 10px;
+                                line-height: 3rem;
+                            }
+                        }
+                    }
+                    .btns-sp{
+                        width: 20%;
+                        display: flex;
+                        justify-content: flex-end;
+                        align-items: center;
+                        span{
+                            margin-right: 10px;
+                        }
+                        button{
+                            cursor: pointer;
+                            background-color: transparent;
+                            border: none;
+                        }
+                        svg{
+                            transform: scale(1.5)
+                        }
+
+                        .is-complete{
+                            @include centerElement;
+                            background-color: $secondary-color;
+                            position: absolute;
+                            width: 26px;
+                            height: 26px;
+                            top: -10px;
+                            left: -10px;
+                            margin: 0;
+                            align-items: center;
+                            border-radius: 100%;
+                            svg{
+                                fill: $gray-color;
+                                transform: scale(1.1);
+                            }
+                        }
+
+                        .edit{
+                            position: absolute;
+                            top: 10px;
+                            right: 20px;
+                            margin: 0;
+                            
+                            svg{
+                                fill: $black-color;
+                                transform: scale(1.1);
+                            }
+                        }
+
+                        .del{
+                            position: absolute;
+                            bottom: 10px;
+                            right: 20px;
+                            margin: 0;
+                            
+                            svg{
+                                fill: $black-color;
+                                transform: scale(1.1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+

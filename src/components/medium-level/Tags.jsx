@@ -10,9 +10,11 @@ const Tags = (props) => {
             {
               tags.map((value, index, array) => {
                     return (
-                        <div key={index}> 
-                            {value}
-                            <button onClick={(e)=>props.deleteTag(e, index)}><AiOutlineClose/></button>
+                        <div className="display-tags" key={index}> 
+                            <span>
+                                {value}
+                                <button onClick={(e)=>props.deleteTag(e, index)}><AiOutlineClose/></button>
+                            </span>
                         </div>
                     )
                 })
@@ -20,6 +22,7 @@ const Tags = (props) => {
             <Input 
                 entry={props.input} 
                 handleChange={props.onInputChange}
+                placeholder="Add tags..."
                 handleKeyDown={props.onKeyDown} />
         </div>
     );
