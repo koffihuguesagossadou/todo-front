@@ -39,7 +39,7 @@ const Tasks = () => {
     }
 
     return (
-        <div className="task-sp">
+        <div className="task-sp Om">
             {
                 /** display receive data from api */
                 items.map((value, index) => {

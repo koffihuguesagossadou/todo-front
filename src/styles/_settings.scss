@@ -41,3 +41,27 @@ body{
 .container{
     margin: 0 2.5rem;
 }
+
+@media screen and (max-width: 768px){
+    *{
+        font-size: 0.75rem;
+    }
+
+    .container{
+        margin: 0 1rem;
+    }
+
+    svg{
+        transform: scale(1);
+    }
+}
+
+@media screen and (min-width: 768px){
+    *{
+        font-size: 1rem;
+    }
+
+    .container{
+        margin: 0 1.5rem;
+    }
+}
