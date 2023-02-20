@@ -3,13 +3,18 @@ import Input from '../low-level/Input'
 import AddBtn from '../low-level/AddBtn';
 import Tags from '../medium-level/Tags'
 import {apiCall} from '../../utils/utils'
+import { styleErrors } from '../../utils/utils';
+
+export const ErrorsContext = React.createContext()
 
 const AddTask = () => {
-
-    const apiEndpoint = "http://localhost:5000/api/todo/";
+    
+    const apiEndpoint = process.env.NODE_ENV==='production' ? process.env.REACT_APP_API_URL+"/api/todo/" : "http://localhost:8888/api/todo/";
     const[entryName, setEntryName] = useState('')
     const[input, setInput] = useState('')
     const [tags, setTags] = useState([])
+    const [errors, setErrors] = useState({})
+    let errorsI = {}
     
 
     /**
@@ -30,7 +35,10 @@ const AddTask = () => {
 
 
     /*********************** */
-
+    const data = {
+        text: entryName,
+        tags : tags
+    }
 
     /**
      * delete a tag 
@@ -41,48 +49,74 @@ const AddTask = () => {
         e.preventDefault()
         setTags(prevState=> prevState.filter((tag, i)=> i !== index))
     } 
-    
-    
+   
 
-    const data = {
-        text: entryName,
-        tags : tags
-    }
-    
-
-    const handleClick = (e)=>{
+    /**
+     * Fuction that is perform when form is submitted
+     * @param {*} e event
+     */
+    function formSubmited(e){
         e.preventDefault()
-        // setTodo(prevState=>{
-        //     return [...prevState, {"id": 7, "name": entry}]
-        // })
-        apiCall().post(apiEndpoint+'addTodos',data)
-        .then(response=>{
-            console.log(response)
-        })
-    }
+        
 
+        if(!data.text){
+            errorsI.text="Please enter a text"
+        }
+        if(data.tags.length===0){
+            errorsI.tags = "Please enter a tag"
+        }
+        console.log(errorsI)
+        setErrors(errorsI)
+        
+        if(Object.keys(errorsI).length === 0){
+            apiCall(apiEndpoint+'addTodos').post(data)
+                .then(response=>{
+                    console.log(response)
+                })
+
+                setEntryName('')
+                setInput('')
+                setTags([])
+        }
+
+    console.log(errors)        
+    }
 
     return (
-        <div className="add-wrapper">
-            <div className="add-form">
-                <form action="" className="frm-sp">
-                    <Input entry={entryName} 
-                    handleChange={(e) => {setEntryName(e.target.value)}}
-                    text="text" 
-                    handleKeyDown={null} 
-                    placeholder="Add a task to do..."  />
-
-                    <Tags 
-                        tags={tags}
-                        input = {input}
-                        onInputChange = {(e) => {setInput(e.target.value)}}
-                        onKeyDown = {onKeyDown}
-                        deleteTag = {deleteTag}
-                    />
-                    <AddBtn handleClick = {(e)=>handleClick(e)}/>
-                </form>
+        <ErrorsContext.Provider value={{errors}}>
+            <div className="add-wrapper">
+                <div className="add-form">
+                    <form onSubmit={formSubmited} className="frm-sp">
+                        <Input 
+                        entry={entryName}
+                        onChange = {(e)=>{
+                            errors.text="" 
+                            setEntryName(e.target.value)}}
+                        name="task"
+                        text="text" 
+                        handleKeyDown={null} 
+                        placeholder="Add a task to do..."  />
+                         {errors.text? 
+                            <p style={styleErrors}>{errors.text}</p>
+                          : ""}
+                        <Tags 
+                            entry={input}
+                            tags={tags}
+                            input = {input}
+                            onChange = {(e)=>{
+                                errors.tags=""
+                                setInput(e.target.value)}}
+                            onKeyDown = {onKeyDown}
+                            deleteTag = {deleteTag}
+                        />
+                        {errors.tags? 
+                            <p style={styleErrors}>{errors.tags}</p>
+                          : ""}
+                        <AddBtn />
+                    </form>
+                </div>
             </div>
-        </div>
+        </ErrorsContext.Provider>
     );
 };
 

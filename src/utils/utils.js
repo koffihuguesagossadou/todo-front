@@ -15,21 +15,34 @@ const options = {
    */
 
 
-export function apiCall(){
+export function apiCall(url){
     
 
     return{
-        get: async function(url){
-            const data = await axios.get(url).then((data) => {
+
+        /**
+         * Api call for retreive all dataS
+         * @returns {Promise} Promise containing information about response provide by server
+         */
+        get: async function(){
+            const data = await axios.get(url, options).then((data) => {
                 return data
             })
 
             return data
         },
 
-        post: async (url, data)=>{
-            const response = await axios.post(url, data).then((response=>{return response}))
+        post: async function(data){
+            const response = await axios.post(url, data,options).then((response=>{return response}))
             return response
+        },
+
+        delete : async function(id){
+            return await axios.delete(url+'/'+id, options).then((response) => {return response})
+        },
+
+        update : async function(data){
+            return axios.put(url, data, options).then((response) => {return response})
         }
     }
 }
@@ -76,8 +89,7 @@ export const deleteData = (url, callback) => {
 }
 
 
-
-
-export const inputFilter = (input) => {
-    
+export const styleErrors = {
+    color: "red",
+    margin: "10px 0"
 }
