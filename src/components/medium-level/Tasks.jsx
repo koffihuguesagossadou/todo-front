@@ -1,27 +1,30 @@
 import React, {useState, useEffect} from 'react';
-import {deleteData, apiCall} from '../../utils/utils'
+import {apiCall} from '../../utils/utils'
 import { AiOutlineCheck } from "react-icons/ai";
 import { FaTrash, FaPen } from "react-icons/fa"
 const Tasks = () => {
 
-    const apiEndpoint = "http://localhost:5000/api/todo/";
+     
+    const apiEndpoint = process.env.NODE_ENV==='production' ? process.env.REACT_APP_API_URL+"/api/todo/" : "http://localhost:8888/api/todo/";
     const [items, setItems] = useState([])
 
     
 
     useEffect(() =>{
-
+        
         
         if(items.length === 0){
             /* A custom function that I created to fetch data from the server. */
-            apiCall().get(apiEndpoint+'getTodos')
+            apiCall(apiEndpoint+'getTodos').get()
                 .then(response=>{
                     const data = response.data.data
                     setItems(Object.entries(data))
                 })
         }
 
-    },[items])
+    })
+
+    console.log(items)
 
     /**
      * 
@@ -29,14 +32,14 @@ const Tasks = () => {
      */
     const deleteTask = (e,index)=>{
         e.preventDefault();
-        deleteData(apiEndpoint+'deleteTodo/'+index, (res)=>{
-            console.log(res)
+        apiCall(apiEndpoint+'deleteTodo').delete(index).then(response=>{
+            console.log(response)
         })
         
     }
 
     return (
-        <div className="task-sp">
+        <div className="task-sp Om">
             {
                 /** display receive data from api */
                 items.map((value, index) => {
@@ -63,10 +66,10 @@ const Tasks = () => {
                                     <span className="is-complete"><AiOutlineCheck/></span> : 
                                     <>
                                         <span className="edit">
-                                            <button onClick={(e)=>deleteTask(e, index)}><FaPen/></button>
+                                            <button onClick={(e)=>deleteTask(e, )}><FaPen/></button>
                                         </span>
                                         <span className="del">
-                                            <button onClick={(e)=>deleteTask(e, index)}><FaTrash/></button>
+                                            <button onClick={(e)=>deleteTask(e, value[0])}><FaTrash/></button>
                                         </span>
                                     </>
                                 }

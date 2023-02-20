@@ -1,3 +1,4 @@
+
 .main-content{
     .todo-wrp{
         @include flexColumn;
@@ -144,3 +145,24 @@
 }
 
 
+
+@media screen and (max-width: 1080px){
+    .todo-wrp{
+        padding: 2rem !important;
+        .add-wrapper{
+            .add-form{
+                width: 100% !important;
+            }
+        }
+    }
+    .task-sp.Om{
+        width: 100% !important;
+        padding: 1rem 0;
+    }
+
+    .task-tags{
+        *{
+            font-size: 1rem;
+        }
+    }
+}

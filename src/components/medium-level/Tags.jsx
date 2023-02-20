@@ -20,9 +20,11 @@ const Tags = (props) => {
                 })
             }
             <Input 
-                entry={props.input} 
-                handleChange={props.onInputChange}
+                entry={props.entry}
+                name="tags"
+                onChange={props.onChange}
                 placeholder="Add tags..."
+                text="text"
                 handleKeyDown={props.onKeyDown} />
         </div>
     );
